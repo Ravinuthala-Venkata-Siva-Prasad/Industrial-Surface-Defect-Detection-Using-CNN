@@ -1,0 +1,47 @@
+
+# Python environment
+.venv/
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter temporary files
+.ipynb_checkpoints/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# IDE settings
+.vscode/
+.idea/
+
+# Operating system
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# Generated outputs
+outputs/*
+!outputs/.gitkeep
+
+# Do not upload Python distribution files
+build/
+dist/
+*.egg-info/
+
+# Keep notebooks and trained models tracked.

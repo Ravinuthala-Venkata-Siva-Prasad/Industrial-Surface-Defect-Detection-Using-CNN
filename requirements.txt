@@ -1,0 +1,15 @@
+tensorflow==2.15.0
+numpy<2
+pandas
+Pillow
+opencv-python-headless
+matplotlib
+scikit-learn
+fastapi
+uvicorn[standard]
+python-multipart
+streamlit
+requests
+pytest
+httpx
+PyYAML

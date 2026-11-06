@@ -1,0 +1,16 @@
+{
+  "model": "Focal_Loss",
+  "test_images": 360,
+  "confidence_threshold": 0.6,
+  "nms_iou_threshold": 0.5,
+  "matching_iou_threshold": 0.5,
+  "TP": 228,
+  "FP": 745,
+  "FN": 626,
+  "precision": 0.234326824254641,
+  "recall": 0.266978922716315,
+  "f1": 0.24958949047064935,
+  "mAP@0.50": 0.16447089435038711,
+  "mAP@0.50:0.95": 0.054585023721007375,
+  "average_detections_per_image": 2.702777777777778
+}

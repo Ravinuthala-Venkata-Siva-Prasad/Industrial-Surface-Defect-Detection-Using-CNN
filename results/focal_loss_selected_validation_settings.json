@@ -1,0 +1,8 @@
+{
+  "model": "Focal_Loss",
+  "confidence_threshold": 0.6,
+  "nms_iou_threshold": 0.5,
+  "matching_iou_threshold": 0.5,
+  "data_split": "validation",
+  "warning": "Do not use these settings as final test results until frozen."
+}
