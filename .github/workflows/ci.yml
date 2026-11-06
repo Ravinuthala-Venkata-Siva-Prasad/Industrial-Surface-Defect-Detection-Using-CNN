@@ -14,7 +14,7 @@ on:
 
 jobs:
   test:
-    name: Run Python Tests
+    name: Run API Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -31,6 +31,30 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Start FastAPI server
+        run: |
+          mkdir -p outputs/api_uploads
+          nohup uvicorn app.api:app --host 127.0.0.1 --port 8000 > api.log 2>&1 &
+
+      - name: Wait for API health check
+        run: |
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:8000/health; then
+              echo "API is ready"
+              exit 0
+            fi
+            sleep 5
+          done
+
+          echo "API failed to start"
+          cat api.log
+          exit 1
+
       - name: Run tests
         run: |
           pytest -v
+
+      - name: Display API logs if tests fail
+        if: failure()
+        run: |
+          cat api.log
