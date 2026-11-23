@@ -1,6 +1,6 @@
 # Industrial Steel Surface Defect Detection and Classification
 
-**End-to-end computer vision application built with Python, TensorFlow, MobileNetV2, FastAPI, Streamlit, Docker, and GitHub Actions.**
+**An end-to-end deep learning and computer vision application using Python, TensorFlow, MobileNetV2, FastAPI, Streamlit, Docker, and GitHub Actions CI/CD.**
 
 [![CI](https://github.com/Ravinuthala-Venkata-Siva-Prasad/Industrial-Surface-Defect-Detection-Using-CNN/actions/workflows/ci.yml/badge.svg)](https://github.com/Ravinuthala-Venkata-Siva-Prasad/Industrial-Surface-Defect-Detection-Using-CNN/actions/workflows/ci.yml)
 [![Docker Build](https://github.com/Ravinuthala-Venkata-Siva-Prasad/Industrial-Surface-Defect-Detection-Using-CNN/actions/workflows/docker-build.yml/badge.svg)](https://github.com/Ravinuthala-Venkata-Siva-Prasad/Industrial-Surface-Defect-Detection-Using-CNN/actions/workflows/docker-build.yml)
@@ -8,103 +8,108 @@
 
 ## Overview
 
-This project explores automated quality inspection of industrial steel surfaces by **detecting, classifying, and localizing defects**. It uses a pretrained **MobileNetV2** backbone with a custom CNN detection head, a **FastAPI** inference service, and an interactive **Streamlit** interface.
+This project investigates **automated steel-surface quality inspection** through defect **detection, classification, and localization**. It combines a pretrained **MobileNetV2** backbone and a custom CNN detection head with a **FastAPI** inference service and an interactive **Streamlit** application.
 
-The repository includes experiments with **binary cross-entropy (BCE)**, **focal loss**, and **fine-tuning**, along with evaluation reports, Docker-based local deployment, tests, and GitHub Actions workflows.
+The repository includes experiments comparing **binary cross-entropy (BCE)**, **focal loss**, and **fine-tuning**; evaluation reports; local deployment through **Docker Compose**; and automated GitHub Actions workflows.
 
-> **Evaluation note:** This is an experimental detector, not a production-validated inspection system. The validation improvement and final test metrics below refer to different evaluation runs and must not be conflated.
+> **Important:** This is an experimental detection system rather than a production-validated quality-control solution. Validation and final-test metrics refer to different experiments and are reported separately below.
 
 ## Application Screenshots
 
-> **Before using these links:** Rename the repository folder `screenshorts` to `screenshots` and rename the four existing files exactly as shown below. Until then, these image links will not render.
+The following screenshots are stored in the existing [`screenshorts/`](screenshorts/) directory. Their paths match the **actual filenames on the `main` branch**; there is no need to rename the folder.
 
-### 1. Streamlit dashboard and backend connection
+### 1. Streamlit Dashboard and FastAPI Connectivity
 
-Displays the FastAPI connection status, model loading status, supported defect classes, and image upload interface.
+Displays the application's image-upload interface, backend connection status, loaded model status, and supported defect categories.
 
-![Industrial surface defect detection dashboard](screenshots/01-steel-defect-detection-dashboard.png)
+![Industrial steel surface defect detection dashboard](screenshorts/01-steel-defect-detection-dashboard.png)
 
-### 2. Defect prediction visualization
+### 2. Steel Surface Defect Prediction Visualization
 
-Shows an uploaded steel surface image and model-generated bounding-box annotations. The dense overlapping annotations illustrate a current false-positive/visualization limitation.
+Shows an uploaded steel image and its prediction visualization. The overlapping annotations in this example highlight a known limitation involving **excess detections and visualization clutter**, not verified high detection accuracy.
 
-![Steel defect prediction results](screenshots/02-steel-defect-prediction-results.png)
+![Steel surface defect prediction results](screenshorts/02-steel-defect-prediction-results.png)
 
-### 3. Detection summary and threshold controls
+### 3. Detection Summary and Adjustable Thresholds
 
-Shows adjustable confidence and NMS IoU thresholds, a detection summary, and individual predicted defect entries. The illustrated run displays **36 detections across 2 predicted classes** at a **0.25 confidence threshold**; this is a single UI example, not an accuracy benchmark.
+Demonstrates the confidence-threshold and NMS IoU controls, with per-detection expandable entries. This screenshot reports **36 detections** across **2 predicted classes**, at a **0.25 confidence threshold**. These are example UI outputs, **not test-set performance metrics**.
 
-![Detection summary and threshold settings](screenshots/03-defect-detection-summary.png)
+![Detection summary and confidence settings](screenshorts/03-defect-detection-summary.png)
 
-### 4. Backend/model status and prediction completion
+### 4. Backend and Model Status
 
-Shows the connected FastAPI backend, loaded model, and completed prediction workflow.
+Shows the FastAPI-connected status, model-loaded indicator, supported classes, and completed prediction workflow.
 
-![FastAPI backend and model status](screenshots/04-fastapi-model-status.png)
+![FastAPI backend and model status](screenshorts/04-fastapi-model-status.png)
 
 ## Supported Defect Classes
 
-The model predicts six steel surface defect categories:
+The system supports six steel surface defect categories:
 
-1. Crazing
-2. Inclusion
-3. Patches
-4. Pitted surface
-5. Rolled-in scale
-6. Scratches
+- **Crazing**
+- **Inclusion**
+- **Patches**
+- **Pitted surface**
+- **Rolled-in scale**
+- **Scratches**
 
 ## Technology Stack
 
-| Area | Technologies |
+| Component | Technologies |
 |---|---|
-| Programming | **Python** |
+| Language | **Python** |
 | Deep learning | **TensorFlow, Keras, CNN, MobileNetV2** |
-| Image processing | **OpenCV, Pillow** |
-| API | **FastAPI, REST** |
+| Computer vision | **OpenCV, Pillow** |
+| API | **FastAPI, REST API** |
 | Web interface | **Streamlit** |
-| Packaging and execution | **Docker, Docker Compose** |
-| Testing and automation | **Pytest, GitHub Actions** |
+| Containers | **Docker, Docker Compose** |
+| Quality and automation | **Pytest, GitHub Actions** |
 
-## Architecture
+## System Architecture
 
 ```mermaid
 flowchart TD
-    A[Steel surface image] --> B[Streamlit interface]
+    A[Steel surface image] --> B[Streamlit frontend]
     B --> C[FastAPI POST /predict]
     C --> D[Image preprocessing: 224 x 224]
     D --> E[Pretrained MobileNetV2 backbone]
     E --> F[Custom CNN detection head]
-    F --> G[Class scores and bounding boxes]
-    G --> H[Confidence filtering and NMS]
-    H --> I[Prediction summary and annotated image]
+    F --> G[Defect class scores and bounding boxes]
+    G --> H[Confidence threshold and NMS]
+    H --> I[Detection visualization and summary]
     I --> B
 ```
 
-The detector processes **224 × 224** images and produces predicted defect classes, confidence scores, and bounding-box coordinates. The interface provides configurable confidence and non-maximum suppression (NMS) settings.
+The detection pipeline accepts steel surface images, resizes them for the model's **224 × 224** input, extracts features with **MobileNetV2**, and produces defect class predictions and bounding-box coordinates. **Confidence filtering** and **non-maximum suppression (NMS)** control the displayed predictions.
 
-## Model Experiments and Validation Results
+## Model Experiments and Measured Improvements
 
-Three configurations were compared on the **validation set**:
+Three detector variants were evaluated on the **validation dataset**.
 
-| Configuration | mAP@0.50 | mAP@0.50:0.95 |
+| Configuration | Validation mAP@0.50 | Validation mAP@0.50:0.95 |
 |---|---:|---:|
 | Baseline BCE | 15.82% | 4.58% |
 | Focal Loss | 20.64% | 6.72% |
-| Improved Focal + Fine-Tuning | **22.45%** | **7.79%** |
+| **Improved Focal + Fine-Tuning** | **22.45%** | **7.79%** |
 
-The fine-tuned configuration improved **validation mAP@0.50 by 6.63 percentage points**, from **15.82% to 22.45%** (**41.9% relative improvement**) compared with the BCE baseline.
+### Quantified improvement
 
-**Evidence:** [`results/model_comparison_validation.csv`](results/model_comparison_validation.csv)
+- **Baseline to fine-tuned validation mAP@0.50:** 15.82% → 22.45%.
+- **Absolute increase:** **6.63 percentage points**.
+- **Relative increase:** **41.9%** over the baseline.
+- **Validation mAP@0.50:0.95:** 4.58% → 7.79%.
 
-> These are **validation** metrics. The best validation configuration is **not** the model named in the available final test report, so its validation result must not be described as final test performance.
+**Source:** [`results/model_comparison_validation.csv`](results/model_comparison_validation.csv)
+
+> The improvement above was measured on the **validation set**. It must not be described as a final-test improvement. Although the fine-tuned configuration achieved the highest reported validation mAP, it also generated many false positives in that evaluation.
 
 ## Final Test Evaluation
 
-The repository's recorded held-out test summary evaluates the **Focal_Loss** configuration on **360 images**:
+The available final test report evaluates the **`Focal_Loss`** configuration, **not** the improved fine-tuned configuration.
 
-| Metric | Recorded result |
+| Metric | Result |
 |---|---:|
-| Test images | 360 |
+| Test images | **360** |
 | Precision | **23.43%** |
 | Recall | **26.70%** |
 | F1-score | **24.96%** |
@@ -114,41 +119,51 @@ The repository's recorded held-out test summary evaluates the **Focal_Loss** con
 | False positives | 745 |
 | False negatives | 626 |
 
-Evaluation settings: **confidence threshold 0.60**, **NMS IoU threshold 0.50**, and **matching IoU threshold 0.50**.
+**Evaluation settings:** confidence threshold **0.60**, NMS IoU threshold **0.50**, matching IoU threshold **0.50**.
 
 **Evidence:**
+
 - [`results/final_test_summary.json`](results/final_test_summary.json)
 - [`results/final_test_per_class.csv`](results/final_test_per_class.csv)
 - [`results/final_test_map.csv`](results/final_test_map.csv)
 
-### Interpretation
+### Result interpretation
 
-The experiments demonstrate a measurable **validation improvement** from fine-tuning. However, the reported final-test precision, recall, and mAP remain low, and the large number of false positives indicates that additional model and post-processing improvements are needed before practical industrial deployment.
+The experiments demonstrate measurable validation improvements from training changes and fine-tuning, but the final recorded test scores remain low for a reliable defect-inspection application. **False-positive reduction, bounding-box localization, and generalization** are important areas for further work.
 
 ## Application Features
 
-- Upload a steel surface image through **Streamlit**.
-- Run inference using a **FastAPI** backend.
-- Display predicted defect classes, confidence scores, and localization results.
-- Adjust **confidence** and **NMS IoU** thresholds in the interface.
-- Inspect backend connectivity and model loading status.
-- Run backend and frontend with **Docker Compose**.
-- Execute automated tests and GitHub Actions CI workflows.
+- Upload steel surface images through **Streamlit**.
+- Connect to the **FastAPI** backend and inspect model-loading status.
+- Run predictions for six defect classes.
+- Display prediction classes, confidence scores, and localization outputs.
+- Adjust **confidence** and **NMS IoU** settings interactively.
+- Start backend and frontend services with **Docker Compose**.
+- Use **Pytest** and **GitHub Actions** for automated checks.
 
 ## Repository Structure
 
 ```text
 Industrial-Surface-Defect-Detection-Using-CNN/
-├── .github/workflows/        # CI, Docker build, Docker publishing
-├── app/                      # FastAPI and Streamlit applications
-├── data/                     # Dataset files or local data directory
-├── models/                   # Saved model assets
-├── notebooks/                # Experiments and exploration
-├── results/                  # Validation and test evaluation reports
-├── screenshots/              # Renamed UI screenshots (see note above)
-├── scripts/                  # Utility scripts
-├── src/                      # Preprocessing, model and inference code
-├── tests/                    # Automated tests
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       ├── docker-build.yml
+│       └── docker-publish.yml
+├── app/                     # FastAPI and Streamlit components
+├── data/                    # Dataset directory
+├── models/                  # Model artifacts
+├── notebooks/               # Model experiments
+├── results/                 # Validation and test reports
+├── screenshorts/            # Existing screenshot folder (exact name)
+│   ├── 01-steel-defect-detection-dashboard.png
+│   ├── 02-steel-defect-prediction-results.png
+│   ├── 03-defect-detection-summary.png
+│   └── 04-fastapi-model-status.png
+├── scripts/                 # Utilities
+├── src/                     # Model, preprocessing, inference
+├── tests/                   # Automated tests
+├── config.yaml
 ├── Dockerfile.backend
 ├── Dockerfile.frontend
 ├── docker-compose.yml
@@ -157,87 +172,94 @@ Industrial-Surface-Defect-Detection-Using-CNN/
 └── README.md
 ```
 
-## Getting Started
+## Quick Start with Docker
 
 ### Prerequisites
 
 - Git
-- Docker and Docker Compose
+- Docker with Docker Compose support
+- Model assets expected by the project configuration
 
-### Clone and run
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/Ravinuthala-Venkata-Siva-Prasad/Industrial-Surface-Defect-Detection-Using-CNN.git
 cd Industrial-Surface-Defect-Detection-Using-CNN
+```
+
+### 2. Build and run the services
+
+```bash
 docker compose up -d --build
 ```
 
-| Service | Local address |
+### 3. Open the interfaces
+
+| Service | Local URL |
 |---|---|
-| Streamlit UI | http://localhost:8501 |
-| FastAPI | http://localhost:8000 |
-| Interactive API docs | http://localhost:8000/docs |
+| Streamlit frontend | http://localhost:8501 |
+| FastAPI backend | http://localhost:8000 |
+| FastAPI API documentation | http://localhost:8000/docs |
 | Health endpoint | http://localhost:8000/health |
 
-> The application requires the model assets expected by the repository's inference configuration. Check the `models/` directory and application configuration if model loading fails.
+> If the backend reports that the model is not loaded, verify that the model assets and paths match the inference configuration in the repository.
 
-### API Endpoints
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| `GET` | `/health` | Backend/model health status |
-| `POST` | `/predict` | Run defect inference on an uploaded image |
-
-### Run tests
+### 4. Run tests
 
 ```bash
 pytest -v
 ```
 
-### Stop services
+### 5. Stop services
 
 ```bash
 docker compose down
 ```
 
-## CI/CD and Containerization
+## REST API
 
-The repository includes three GitHub Actions workflows:
+| Method | Endpoint | Function |
+|---|---|---|
+| `GET` | `/health` | Check backend and model health |
+| `POST` | `/predict` | Run defect detection on an uploaded image |
 
-- [`ci.yml`](.github/workflows/ci.yml): automated continuous integration
-- [`docker-build.yml`](.github/workflows/docker-build.yml): Docker build checks
-- [`docker-publish.yml`](.github/workflows/docker-publish.yml): Docker image publishing
+Use the interactive documentation at **http://localhost:8000/docs** to inspect request parameters and responses.
 
-**Verified successful workflow executions (November 19, 2026):**
+## GitHub Actions CI/CD
 
-- [CI run](https://github.com/Ravinuthala-Venkata-Siva-Prasad/Industrial-Surface-Defect-Detection-Using-CNN/actions/runs/44568230407)
-- [Docker build run](https://github.com/Ravinuthala-Venkata-Siva-Prasad/Industrial-Surface-Defect-Detection-Using-CNN/actions/runs/44568230444)
-- [Docker publishing run](https://github.com/Ravinuthala-Venkata-Siva-Prasad/Industrial-Surface-Defect-Detection-Using-CNN/actions/runs/44568230486)
+The repository contains three workflows:
 
-Successful CI and image publishing demonstrate workflow execution; they **do not establish that a public production endpoint is live**.
+- [Continuous Integration](.github/workflows/ci.yml)
+- [Docker Build](.github/workflows/docker-build.yml)
+- [Docker Image Publishing](.github/workflows/docker-publish.yml)
 
-## Limitations and Next Improvements
+**Verified successful executions on November 19, 2026:**
 
-1. **Reduce false positives:** tune confidence thresholds, NMS, anchors, and detection head behavior.
-2. **Improve localization:** inspect bounding-box annotations and per-class failure cases.
-3. **Compare with YOLO:** benchmark a YOLO detector against MobileNetV2 using identical train/validation/test splits and consistent metrics.
-4. **Test the fine-tuned model:** evaluate the improved fine-tuned configuration on the held-out test set.
-5. **Expand diagnostics:** publish per-class precision/recall, confusion analysis, and example success/failure cases.
-6. **Measure inference efficiency:** record latency, memory consumption, and throughput on a documented hardware configuration.
-7. **Verify deployment:** document any production endpoint only after confirming availability and monitoring.
+| Workflow | Evidence |
+|---|---|
+| CI | [Successful run](https://github.com/Ravinuthala-Venkata-Siva-Prasad/Industrial-Surface-Defect-Detection-Using-CNN/actions/runs/44568230407) |
+| Docker Build | [Successful run](https://github.com/Ravinuthala-Venkata-Siva-Prasad/Industrial-Surface-Defect-Detection-Using-CNN/actions/runs/44568230444) |
+| Docker Publishing | [Successful run](https://github.com/Ravinuthala-Venkata-Siva-Prasad/Industrial-Surface-Defect-Detection-Using-CNN/actions/runs/44568230486) |
 
-## Evaluation Artifacts
+A successful workflow or container-image publication **does not prove that a public production service is live**.
 
-Detailed experimental results are available in [`results/`](results/), including baseline, focal-loss, fine-tuned validation reports, threshold/NMS sweeps, and final test results.
+## Limitations and Roadmap
+
+1. **Reduce false positives:** tune model confidence, NMS, anchors, and post-processing.
+2. **Improve bounding boxes:** review label quality, localization loss, and per-class errors.
+3. **Benchmark YOLO:** compare YOLO and MobileNetV2-based detection using identical dataset splits and metrics.
+4. **Test the fine-tuned model:** generate a held-out final test evaluation for the best validation model.
+5. **Improve reproducibility:** document dataset splits, fixed seeds, and model configurations.
+6. **Measure inference performance:** report latency and throughput on named hardware.
+7. **Validate a production deployment:** monitor a live endpoint before claiming cloud availability.
 
 ## Author
 
 **Ravinuthala Venkata Siva Prasad**  
-M.Tech — Artificial Intelligence
+M.Tech in Artificial Intelligence
 
-- [GitHub Profile](https://github.com/Ravinuthala-Venkata-Siva-Prasad)
-- [LinkedIn](https://www.linkedin.com/in/ravinuthala-venkata-siva-prasad/)
+[GitHub](https://github.com/Ravinuthala-Venkata-Siva-Prasad) · [LinkedIn](https://www.linkedin.com/in/ravinuthala-venkata-siva-prasad/)
 
 ---
 
-*This repository is an engineering and research portfolio project. Reported performance values are tied to the documented evaluation configurations and datasets.*
+*All reported performance results are drawn from this repository's published evaluation artifacts. Validation improvements and final test outcomes are reported separately.*
